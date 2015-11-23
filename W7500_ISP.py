@@ -15,7 +15,7 @@ import binascii
 import hexeditor
 import time
 import os
-import wx.lib.scrolledpanel as scrolled
+
 
 def byte_to_binary(n):
     return ''.join(str((n & (1 << i)) and 1) for i in reversed(range(8)))
@@ -31,35 +31,22 @@ def hex_to_binary(h):
 class W7500_ISP ( wx.Frame ):
     
     def __init__( self, parent ):
-        wx.Frame.__init__ ( self, parent, id = wx.ID_ANY, title = u"W7500 ISP Tool", pos = wx.DefaultPosition, size = wx.Size( -1,-1 ), style = wx.DEFAULT_FRAME_STYLE|wx.TAB_TRAVERSAL )
-         #Add a panel so it looks the correct on all platforms
-        self.panel = wx.Panel(self, wx.ID_ANY)
-        # --------------------
-        # Scrolled panel stuff
-        self.scrolled_panel = scrolled.ScrolledPanel(self.panel, -1,style = wx.TAB_TRAVERSAL|wx.SUNKEN_BORDER, name="panel1")
-        self.scrolled_panel.SetAutoLayout(1)
-        self.scrolled_panel.SetupScrolling()
-        self.spSize = wx.BoxSizer( wx.VERTICAL )
-        self.Bind( wx.Frame, self.oninit)
-        #self.scrolled_panel.SetSizer(self.spSizer)
-
-
+        wx.Frame.__init__ ( self, parent, id = wx.ID_ANY, title = u"W7500 ISP Tool", pos = wx.DefaultPosition, size = wx.Size( 561,722 ), style = wx.CAPTION|wx.DEFAULT_FRAME_STYLE|wx.FRAME_TOOL_WINDOW|wx.MAXIMIZE_BOX|wx.TAB_TRAVERSAL )
         
-        #USER CODE
-        self.GetComPortList()
-
-    def oninit( self, event ):
         self.SetSizeHintsSz( wx.Size( -1,-1 ), wx.DefaultSize )
-        self.SetFont( wx.Font( 9, 74, 90, 90, False, "Verdana" ) )
+        self.SetFont( wx.Font( 8, 74, 90, 90, False, "Verdana" ) )
         self.SetForegroundColour( wx.SystemSettings.GetColour( wx.SYS_COLOUR_WINDOWTEXT ) )
         self.SetBackgroundColour( wx.SystemSettings.GetColour( wx.SYS_COLOUR_3DLIGHT ) )
         
         bSizer5 = wx.BoxSizer( wx.VERTICAL )
-        self.scrolled_panel.SetSizer(bSizer5)
-        gSizer3 = wx.GridSizer( 0, 2, 0, 0 )
         
+        bSizer5.SetMinSize( wx.Size( 0,0 ) ) 
+        gSizer3 = wx.GridSizer( 0, 0, 0, 0 )
+        
+        gSizer3.SetMinSize( wx.Size( 0,0 ) ) 
         sbSizer_Step1 = wx.StaticBoxSizer( wx.StaticBox( self, wx.ID_ANY, u"Step 1 - Serial Option" ), wx.VERTICAL )
         
+        sbSizer_Step1.SetMinSize( wx.Size( 0,0 ) ) 
         fgSizer4 = wx.FlexGridSizer( 0, 3, 0, 0 )
         fgSizer4.SetFlexibleDirection( wx.BOTH )
         fgSizer4.SetNonFlexibleGrowMode( wx.FLEX_GROWMODE_SPECIFIED )
@@ -72,12 +59,12 @@ class W7500_ISP ( wx.Frame ):
         self.m_comboBox_serial_port = wx.ComboBox( self, wx.ID_ANY, wx.EmptyString, wx.DefaultPosition, wx.DefaultSize, m_comboBox_serial_portChoices, 0 )
         fgSizer4.Add( self.m_comboBox_serial_port, 1, wx.ALL|wx.ALIGN_CENTER_VERTICAL|wx.ALIGN_CENTER_HORIZONTAL|wx.EXPAND, 5 )
         
-        self.m_button_serial_refresh = wx.Button( self, wx.ID_ANY, u"Refresh", wx.DefaultPosition, wx.DefaultSize, 0 )
+        self.m_button_serial_refresh = wx.Button( self, wx.ID_ANY, u"Refresh", wx.DefaultPosition, wx.Size( 50,-1 ), 0 )
         fgSizer4.Add( self.m_button_serial_refresh, 0, wx.ALL, 5 )
         
         self.m_staticText_baud_rate = wx.StaticText( self, wx.ID_ANY, u"Baud Rate", wx.DefaultPosition, wx.DefaultSize, 0 )
         self.m_staticText_baud_rate.Wrap( -1 )
-        fgSizer4.Add( self.m_staticText_baud_rate, 1, wx.ALIGN_CENTER|wx.ALL|wx.EXPAND, 5 )
+        fgSizer4.Add( self.m_staticText_baud_rate, 0, wx.ALIGN_CENTER|wx.ALL|wx.EXPAND, 5 )
         
         m_comboBox_baud_rateChoices = [ u"2400", u"9600", u"14400", u"19200", u"38400", u"57600", u"76800", u"115200", u"230400", u"460800" ]
         self.m_comboBox_baud_rate = wx.ComboBox( self, wx.ID_ANY, wx.EmptyString, wx.DefaultPosition, wx.DefaultSize, m_comboBox_baud_rateChoices, 0 )
@@ -85,9 +72,9 @@ class W7500_ISP ( wx.Frame ):
         fgSizer4.Add( self.m_comboBox_baud_rate, 1, wx.ALL|wx.EXPAND|wx.ALIGN_CENTER_HORIZONTAL|wx.ALIGN_CENTER_VERTICAL, 5 )
         
         
-        fgSizer4.AddSpacer( ( 0, 0), 1, wx.EXPAND, 5 )
+        fgSizer4.AddSpacer( ( 0, 0), 1, 0, 5 )
         
-        self.m_button_serial_open = wx.Button( self, wx.ID_ANY, u"Open", wx.DefaultPosition, wx.DefaultSize, 0 )
+        self.m_button_serial_open = wx.Button( self, wx.ID_ANY, u"Open", wx.DefaultPosition, wx.Size( 0,0 ), 0 )
         self.m_button_serial_open.SetDefault() 
         fgSizer4.Add( self.m_button_serial_open, 1, wx.ALL|wx.ALIGN_CENTER_VERTICAL|wx.ALIGN_CENTER_HORIZONTAL|wx.EXPAND, 5 )
         
@@ -98,22 +85,22 @@ class W7500_ISP ( wx.Frame ):
         fgSizer4.Add( self.m_button_serial_close, 1, wx.ALL|wx.ALIGN_CENTER_VERTICAL|wx.ALIGN_CENTER_HORIZONTAL|wx.EXPAND, 5 )
         
         
-        fgSizer4.AddSpacer( ( 0, 0), 1, wx.EXPAND, 5 )
+        fgSizer4.AddSpacer( ( 0, 0), 1, 0, 5 )
         
         
-        sbSizer_Step1.Add( fgSizer4, 1, wx.EXPAND, 5 )
+        sbSizer_Step1.Add( fgSizer4, 1, 0, 5 )
         
         
-        gSizer3.Add( sbSizer_Step1, 0, wx.ALL|wx.EXPAND, 5 )
+        gSizer3.Add( sbSizer_Step1, 0, wx.ALIGN_CENTER, 5 )
         
         sbSizer_Step2 = wx.StaticBoxSizer( wx.StaticBox( self, wx.ID_ANY, u"Step 2 - Erase" ), wx.VERTICAL )
         
+        sbSizer_Step2.SetMinSize( wx.Size( 0,0 ) ) 
         bSizer_Step2_Child = wx.BoxSizer( wx.VERTICAL )
         
         m_listBox_EraseBlockChoices = [ u"Erase Data  0 (0x0003FE00~0x0003FEFF)", u"Erase Data  1 (0x0003FF00~0x0003FFFF)", u"Erase Block 0 (0x00000000~0x00000FFF)", u"Erase Block 1 (0x00001000~0x00001FFF)", u"Erase Block 2 (0x00002000~0x00002FFF)", u"Erase Block 3 (0x00003000~0x00003FFF)", u"Erase Block 4 (0x00004000~0x00004FFF)", u"Erase Block 5 (0x00005000~0x00005FFF)", u"Erase Block 6 (0x00006000~0x00006FFF)", u"Erase Block 7 (0x00007000~0x00007FFF)", u"Erase Block 8 (0x00008000~0x00008FFF)", u"Erase Block 9 (0x00009000~0x00009FFF)", u"Erase Block10 (0x0000A000~0x0000AFFF)", u"Erase Block11 (0x0000B000~0x0000BFFF)", u"Erase Block12 (0x0000C000~0x0000CFFF)", u"Erase Block13 (0x0000D000~0x0000DFFF)", u"Erase Block14 (0x0000E000~0x0000EFFF)", u"Erase Block15 (0x0000F000~0x0000FFFF)", u"Erase Block16 (0x00010000~0x00010FFF)", u"Erase Block17 (0x00011000~0x00011FFF)", u"Erase Block18 (0x00012000~0x00012FFF)", u"Erase Block19 (0x00013000~0x00013FFF)", u"Erase Block20 (0x00014000~0x00014FFF)", u"Erase Block21 (0x00015000~0x00015FFF)", u"Erase Block22 (0x00016000~0x00016FFF)", u"Erase Block23 (0x00017000~0x00017FFF)", u"Erase Block24 (0x00018000~0x00018FFF)", u"Erase Block25 (0x00019000~0x00019FFF)", u"Erase Block26 (0x0001A000~0x0001AFFF)", u"Erase Block27 (0x0001B000~0x0001BFFF)", u"Erase Block28 (0x0001C000~0x0001CFFF)", u"Erase Block29 (0x0001D000~0x0001DFFF)", u"Erase Block30 (0x0001E000~0x0001EFFF)", u"Erase Block31 (0x0001F000~0x0001FFFF)" ]
-        self.m_listBox_EraseBlock = wx.ListBox( self, wx.ID_ANY, wx.DefaultPosition, wx.DefaultSize, m_listBox_EraseBlockChoices, wx.LB_MULTIPLE )
+        self.m_listBox_EraseBlock = wx.ListBox( self, wx.ID_ANY, wx.Point( -1,-1 ), wx.Size( -1,80 ), m_listBox_EraseBlockChoices, wx.LB_HSCROLL|wx.LB_MULTIPLE )
         self.m_listBox_EraseBlock.Enable( False )
-        self.m_listBox_EraseBlock.SetMinSize( wx.Size( 100,70 ) )
         
         bSizer_Step2_Child.Add( self.m_listBox_EraseBlock, 0, wx.ALL|wx.EXPAND, 5 )
         
@@ -125,26 +112,27 @@ class W7500_ISP ( wx.Frame ):
         bSizer_Step2_Child.Add( self.m_checkBox_erase_chip, 0, wx.ALL|wx.EXPAND, 5 )
         
         
-        sbSizer_Step2.Add( bSizer_Step2_Child, 0, wx.EXPAND, 5 )
+        sbSizer_Step2.Add( bSizer_Step2_Child, 0, 0, 2 )
         
         
-        gSizer3.Add( sbSizer_Step2, 0, wx.EXPAND|wx.ALL, 5 )
+        gSizer3.Add( sbSizer_Step2, 1, wx.ALL|wx.EXPAND, 5 )
         
         
-        bSizer5.Add( gSizer3, 0, wx.EXPAND, 5 )
+        bSizer5.Add( gSizer3, 0, 0, 5 )
         
         sbSizer_Step3 = wx.StaticBoxSizer( wx.StaticBox( self, wx.ID_ANY, u"Step 3 - Code Read Lock or Data R/W Lock" ), wx.VERTICAL )
         
         bSizer9 = wx.BoxSizer( wx.HORIZONTAL )
         
         self.m_checkBox_all_code_read_lock = wx.CheckBox( self, wx.ID_ANY, u"All Code Read Lock/Data R/W Lock", wx.DefaultPosition, wx.DefaultSize, 0 )
+        self.m_checkBox_all_code_read_lock.SetValue(True) 
         bSizer9.Add( self.m_checkBox_all_code_read_lock, 0, wx.ALL, 5 )
         
         self.m_checkBox_all_code_read_unlock = wx.CheckBox( self, wx.ID_ANY, u"All Code Read Unlock/Data R/W Unlock", wx.DefaultPosition, wx.DefaultSize, 0 )
         bSizer9.Add( self.m_checkBox_all_code_read_unlock, 0, wx.ALL, 5 )
         
         
-        sbSizer_Step3.Add( bSizer9, 0, wx.ALL, 5 )
+        sbSizer_Step3.Add( bSizer9, 0, wx.ALL|wx.EXPAND, 5 )
         
         bSizer10 = wx.BoxSizer( wx.HORIZONTAL )
         
@@ -154,23 +142,28 @@ class W7500_ISP ( wx.Frame ):
         self.m_checkBox_cabwl = wx.CheckBox( self, wx.ID_ANY, u"Code All Block Write", wx.DefaultPosition, wx.DefaultSize, 0 )
         bSizer10.Add( self.m_checkBox_cabwl, 0, wx.ALL, 5 )
         
+        
+        sbSizer_Step3.Add( bSizer10, 0, wx.ALL|wx.EXPAND, 5 )
+        
+        bSizer92 = wx.BoxSizer( wx.HORIZONTAL )
+        
         self.m_checkBox_drl1 = wx.CheckBox( self, wx.ID_ANY, u"Data 1 Read", wx.DefaultPosition, wx.DefaultSize, 0 )
-        bSizer10.Add( self.m_checkBox_drl1, 0, wx.ALL, 5 )
+        bSizer92.Add( self.m_checkBox_drl1, 0, wx.ALL, 5 )
         
         self.m_checkBox_drl0 = wx.CheckBox( self, wx.ID_ANY, u"Data 0 Read", wx.DefaultPosition, wx.DefaultSize, 0 )
-        bSizer10.Add( self.m_checkBox_drl0, 0, wx.ALL, 5 )
+        bSizer92.Add( self.m_checkBox_drl0, 0, wx.ALL, 5 )
         
         self.m_checkBox_dwl1 = wx.CheckBox( self, wx.ID_ANY, u"Data 1 Write", wx.DefaultPosition, wx.DefaultSize, 0 )
-        bSizer10.Add( self.m_checkBox_dwl1, 0, wx.ALL, 5 )
+        bSizer92.Add( self.m_checkBox_dwl1, 0, wx.ALL, 5 )
         
         self.m_checkBox_dwl0 = wx.CheckBox( self, wx.ID_ANY, u"Data 0 Write", wx.DefaultPosition, wx.DefaultSize, 0 )
-        bSizer10.Add( self.m_checkBox_dwl0, 0, wx.ALL, 5 )
+        bSizer92.Add( self.m_checkBox_dwl0, 0, wx.ALL, 5 )
         
         
-        sbSizer_Step3.Add( bSizer10, 0, wx.ALL, 5 )
+        sbSizer_Step3.Add( bSizer92, 1, wx.EXPAND, 5 )
         
         
-        bSizer5.Add( sbSizer_Step3, 0, wx.EXPAND|wx.ALL, 5 )
+        bSizer5.Add( sbSizer_Step3, 0, wx.ALL|wx.EXPAND, 5 )
         
         sbSizer_Step4 = wx.StaticBoxSizer( wx.StaticBox( self, wx.ID_ANY, u"Step 4 - Code Write Lock" ), wx.VERTICAL )
         
@@ -183,7 +176,7 @@ class W7500_ISP ( wx.Frame ):
         bSizer11.Add( self.m_checkBox_all_code_write_unlock, 0, wx.ALL, 5 )
         
         
-        sbSizer_Step4.Add( bSizer11, 0, wx.EXPAND|wx.ALL, 5 )
+        sbSizer_Step4.Add( bSizer11, 0, wx.ALL|wx.EXPAND|wx.ALIGN_CENTER_HORIZONTAL, 5 )
         
         sbSizer_code_write_block = wx.StaticBoxSizer( wx.StaticBox( self, wx.ID_ANY, u"Block" ), wx.VERTICAL )
         
@@ -414,13 +407,13 @@ class W7500_ISP ( wx.Frame ):
         gSizer8.Add( self.m_checkBox_cwl0, 0, wx.ALL|wx.ALIGN_CENTER_HORIZONTAL|wx.ALIGN_CENTER_VERTICAL, 5 )
         
         
-        sbSizer_code_write_block.Add( gSizer8, 0, wx.EXPAND|wx.RIGHT|wx.LEFT, 5 )
+        sbSizer_code_write_block.Add( gSizer8, 0, wx.ALL|wx.FIXED_MINSIZE, 4 )
         
         
-        sbSizer_Step4.Add( sbSizer_code_write_block, 0, wx.EXPAND|wx.ALL, 5 )
+        sbSizer_Step4.Add( sbSizer_code_write_block, 0, wx.ALL|wx.FIXED_MINSIZE, 5 )
         
         
-        bSizer5.Add( sbSizer_Step4, 0, wx.EXPAND|wx.ALL, 5 )
+        bSizer5.Add( sbSizer_Step4, 0, wx.ALL, 5 )
         
         sbSizer_Step5 = wx.StaticBoxSizer( wx.StaticBox( self, wx.ID_ANY, u"Step 5 - Select the binary file" ), wx.VERTICAL )
         
@@ -434,20 +427,21 @@ class W7500_ISP ( wx.Frame ):
         self.m_staticText_Binary_File.Wrap( -1 )
         fgSizer5.Add( self.m_staticText_Binary_File, 0, wx.ALL|wx.ALIGN_CENTER_VERTICAL, 5 )
         
-        self.m_textCtrl_File_Path = wx.TextCtrl( self, wx.ID_ANY, wx.EmptyString, wx.DefaultPosition, wx.Size( 470,-1 ), 0 )
+        self.m_textCtrl_File_Path = wx.TextCtrl( self, wx.ID_ANY, wx.EmptyString, wx.DefaultPosition, wx.Size( 300,-1 ), 0 )
         fgSizer5.Add( self.m_textCtrl_File_Path, 0, wx.ALL|wx.EXPAND|wx.ALIGN_CENTER_VERTICAL, 5 )
         
         self.m_button_browse = wx.Button( self, wx.ID_ANY, u"Browse", wx.DefaultPosition, wx.DefaultSize, 0 )
         fgSizer5.Add( self.m_button_browse, 0, wx.ALL|wx.ALIGN_CENTER_VERTICAL|wx.ALIGN_CENTER_HORIZONTAL, 5 )
         
         
-        bSizer14.Add( fgSizer5, 1, wx.EXPAND, 5 )
+        bSizer14.Add( fgSizer5, 0, wx.EXPAND, 5 )
         
         
         sbSizer_Step5.Add( bSizer14, 0, wx.EXPAND|wx.ALL, 5 )
         
         bSizer15 = wx.BoxSizer( wx.HORIZONTAL )
         
+        bSizer15.SetMinSize( wx.Size( 0,0 ) ) 
         self.m_checkBox_verify = wx.CheckBox( self, wx.ID_ANY, u"Verify after programming", wx.DefaultPosition, wx.DefaultSize, 0 )
         self.m_checkBox_verify.Enable( False )
         
@@ -461,33 +455,25 @@ class W7500_ISP ( wx.Frame ):
         bSizer15.Add( self.m_checkBox_WriteDataFlash, 0, wx.ALL, 5 )
         
         
-        sbSizer_Step5.Add( bSizer15, 0, wx.EXPAND|wx.ALL, 5 )
+        sbSizer_Step5.Add( bSizer15, 0, wx.EXPAND|wx.ALL, 1 )
         
         
-        bSizer5.Add( sbSizer_Step5, 0, wx.ALL|wx.EXPAND, 5 )
+        bSizer5.Add( sbSizer_Step5, 0, wx.ALL, 5 )
         
         bSizer91 = wx.BoxSizer( wx.VERTICAL )
         
-        self.m_button_Isp_start = wx.Button( self, wx.ID_ANY, u"ISP Start", wx.DefaultPosition, wx.DefaultSize, 0 )
+        self.m_button_Isp_start = wx.Button( self, wx.ID_ANY, u"ISP Start", wx.DefaultPosition, wx.Size( -1,-1 ), 0 )
         self.m_button_Isp_start.SetFont( wx.Font( 12, 74, 90, 92, False, "Verdana" ) )
+        self.m_button_Isp_start.SetMinSize( wx.Size( 300,-1 ) )
         
-        bSizer91.Add( self.m_button_Isp_start, 0, wx.ALL|wx.ALIGN_CENTER_HORIZONTAL|wx.EXPAND, 5 )
-        
-        
-        bSizer5.Add( bSizer91, 1, wx.EXPAND, 5 )
-        
-        bSizer92 = wx.BoxSizer( wx.VERTICAL )
+        bSizer91.Add( self.m_button_Isp_start, 0, wx.ALL|wx.ALIGN_CENTER_HORIZONTAL, 5 )
         
         
-        bSizer92.AddSpacer( ( 0, 0), 1, wx.EXPAND, 5 )
-        
-        
-        bSizer5.Add( bSizer92, 1, wx.EXPAND, 5 )
+        bSizer5.Add( bSizer91, 0, wx.ALIGN_CENTER_HORIZONTAL, 5 )
         
         
         self.SetSizer( bSizer5 )
         self.Layout()
-        bSizer5.Fit( self )
         self.m_statusBar_W7500_Status = self.CreateStatusBar( 1, wx.ST_SIZEGRIP, wx.ID_ANY )
         self.m_menubar1 = wx.MenuBar( 0 )
         self.m_menu_file = wx.Menu()
@@ -538,6 +524,12 @@ class W7500_ISP ( wx.Frame ):
         self.Bind( wx.EVT_MENU, self.onHexEditor, id = self.m_menuItem_HexEditor.GetId() )
         self.Bind( wx.EVT_MENU, self.onFlashDump, id = self.m_menuItem_MainFlashDump.GetId() )
         self.Bind( wx.EVT_MENU, self.onDataDump, id = self.m_menuItem_Data_Dump.GetId() )
+
+        
+        #USER CODE
+        self.GetComPortList()
+
+
         
     def __del__( self ):
         if self.isopen == 1:
@@ -910,7 +902,7 @@ class W7500_ISP ( wx.Frame ):
                 comboBox_serial_portChoices.append(self.port[0])
  
         self.m_comboBox_serial_port.SetItems(comboBox_serial_portChoices)
-    
+        
 
 
 if __name__ == "__main__":
